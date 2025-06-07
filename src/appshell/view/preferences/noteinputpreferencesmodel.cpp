@@ -85,6 +85,10 @@ void NoteInputPreferencesModel::load()
         emit notePlayDurationMillisecondsChanged(value);
     });
 
+    playbackConfiguration()->notePreviewVolumeChanged().onReceive(this, [this](int value) {
+        emit notePreviewVolumeChanged(value);
+    });
+
     engravingConfiguration()->dynamicsApplyToAllVoicesChanged().onReceive(this, [this](bool value) {
         emit dynamicsApplyToAllVoicesChanged(value);
     });
@@ -170,6 +174,11 @@ bool NoteInputPreferencesModel::playPreviewNotesInInputByDuration() const
 int NoteInputPreferencesModel::notePlayDurationMilliseconds() const
 {
     return notationConfiguration()->notePlayDurationMilliseconds();
+}
+
+int NoteInputPreferencesModel::notePreviewVolume() const
+{
+    return playbackConfiguration()->notePreviewVolume();
 }
 
 bool NoteInputPreferencesModel::playChordWhenEditing() const
@@ -290,6 +299,15 @@ void NoteInputPreferencesModel::setNotePlayDurationMilliseconds(int duration)
     }
 
     notationConfiguration()->setNotePlayDurationMilliseconds(duration);
+}
+
+void NoteInputPreferencesModel::setNotePreviewVolume(int volume)
+{
+    if (volume == notePreviewVolume()) {
+        return;
+    }
+
+    playbackConfiguration()->setNotePreviewVolume(volume);
 }
 
 void NoteInputPreferencesModel::setPlayChordWhenEditing(bool value)

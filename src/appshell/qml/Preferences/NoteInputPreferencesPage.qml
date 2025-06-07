@@ -100,6 +100,7 @@ PreferencesPage {
             playChordWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordWhenEditing : false
             playChordSymbolWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordSymbolWhenEditing : false
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
+            notePreviewVolume: noteInputModel.notePreviewVolume
 
             playNotesOnMidiInput: noteInputModel.playNotesWhenEditing && noteInputModel.midiInputEnabled ? noteInputModel.playNotesOnMidiInput : false
             playNotesOnMidiInputBoxEnabled: noteInputModel.midiInputEnabled && noteInputModel.playNotesWhenEditing
@@ -125,6 +126,10 @@ PreferencesPage {
 
             onNotePlayDurationChangeRequested: function(duration) {
                 noteInputModel.notePlayDurationMilliseconds = duration
+            }
+
+            onNotePreviewVolumeChangeRequested: function(vol) {
+                noteInputModel.notePreviewVolume = vol
             }
 
             onPlayNotesOnMidiInputChangeRequested: function(play) {

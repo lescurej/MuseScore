@@ -63,6 +63,7 @@ double MScore::nudgeStep;
 double MScore::nudgeStep10;
 double MScore::nudgeStep50;
 int MScore::defaultPlayDuration;
+int MScore::notePreviewVolume;
 
 bool MScore::noExcerpts = false;
 bool MScore::noImages = false;

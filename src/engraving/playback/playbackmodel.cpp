@@ -34,6 +34,7 @@
 #include "dom/tempo.h"
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
+#include "dom/mscore.h"
 
 #include "log.h"
 
@@ -249,8 +250,8 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     const RepeatList& repeats = repeatList();
 
-    constexpr timestamp_t actualTimestamp = 0;
-    constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural);
+    timestamp_t actualTimestamp = 0;
+    dynamic_level_t actualDynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural) * MScore::notePreviewVolume / 100;
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
     const PlaybackContextPtr ctx = playbackCtx(trackId);

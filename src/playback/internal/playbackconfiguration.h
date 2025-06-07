@@ -71,6 +71,10 @@ public:
     muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
                                             const muse::String& instrumentSoundId) const override;
 
+    int notePreviewVolume() const override;
+    void setNotePreviewVolume(int volume) override;
+    muse::async::Channel<int> notePreviewVolumeChanged() const override;
+
     bool muteHiddenInstruments() const override;
     void setMuteHiddenInstruments(bool mute) override;
     muse::async::Channel<bool> muteHiddenInstrumentsChanged() const override;
@@ -105,6 +109,7 @@ private:
     muse::async::Channel<MixerSectionType, bool> m_isMixerSectionVisibleChanged;
 
     muse::async::Channel<bool> m_muteHiddenInstrumentsChanged;
+    muse::async::Channel<int> m_notePreviewVolumeChanged;
 };
 }
 

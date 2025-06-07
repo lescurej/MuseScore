@@ -68,6 +68,10 @@ public:
     virtual muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
                                                     const muse::String& instrumentSoundId) const = 0;
 
+    virtual int notePreviewVolume() const = 0;
+    virtual void setNotePreviewVolume(int volume) = 0;
+    virtual muse::async::Channel<int> notePreviewVolumeChanged() const = 0;
+
     virtual bool muteHiddenInstruments() const = 0;
     virtual void setMuteHiddenInstruments(bool mute) = 0;
     virtual muse::async::Channel<bool> muteHiddenInstrumentsChanged() const = 0;

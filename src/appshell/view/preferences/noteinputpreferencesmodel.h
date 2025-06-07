@@ -62,6 +62,7 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
         bool playPreviewNotesInInputByDuration READ playPreviewNotesInInputByDuration WRITE setPlayPreviewNotesInInputByDuration NOTIFY playPreviewNotesInInputByDurationChanged)
     Q_PROPERTY(
         int notePlayDurationMilliseconds READ notePlayDurationMilliseconds WRITE setNotePlayDurationMilliseconds NOTIFY notePlayDurationMillisecondsChanged)
+    Q_PROPERTY(int notePreviewVolume READ notePreviewVolume WRITE setNotePreviewVolume NOTIFY notePreviewVolumeChanged)
     Q_PROPERTY(bool playChordWhenEditing READ playChordWhenEditing WRITE setPlayChordWhenEditing NOTIFY playChordWhenEditingChanged)
     Q_PROPERTY(
         bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY playChordSymbolWhenEditingChanged)
@@ -95,6 +96,7 @@ public:
     bool playNotesWhenEditing() const;
     bool playPreviewNotesInInputByDuration() const;
     int notePlayDurationMilliseconds() const;
+    int notePreviewVolume() const;
     bool playChordWhenEditing() const;
     bool playChordSymbolWhenEditing() const;
     bool playNotesOnMidiInput() const;
@@ -117,6 +119,7 @@ public slots:
     void setPlayNotesWhenEditing(bool value);
     void setPlayPreviewNotesInInputByDuration(bool value);
     void setNotePlayDurationMilliseconds(int duration);
+    void setNotePreviewVolume(int volume);
     void setPlayChordWhenEditing(bool value);
     void setPlayChordSymbolWhenEditing(bool value);
     void setPlayNotesOnMidiInput(bool value);
@@ -139,6 +142,7 @@ signals:
     void playNotesWhenEditingChanged(bool value);
     void playPreviewNotesInInputByDurationChanged(bool value);
     void notePlayDurationMillisecondsChanged(int duration);
+    void notePreviewVolumeChanged(int volume);
     void playChordWhenEditingChanged(bool value);
     void playChordSymbolWhenEditingChanged(bool value);
     void playNotesOnMidiInputChanged(bool value);

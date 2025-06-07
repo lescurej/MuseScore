@@ -34,6 +34,7 @@ BaseSection {
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
     property alias playPreviewNotesInInputByDuration: playPreviewNotesInInputByDurationBox.checked
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
+    property alias notePreviewVolume: previewVolumeControl.currentValue
 
     property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
     property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
@@ -43,6 +44,7 @@ BaseSection {
     signal playChordSymbolWhenEditingChangeRequested(bool play)
     signal playPreviewNotesInInputByDurationChangeRequested(bool play)
     signal notePlayDurationChangeRequested(int duration)
+    signal notePreviewVolumeChangeRequested(int volume)
 
     signal playNotesOnMidiInputChangeRequested(bool play)
 
@@ -101,6 +103,30 @@ BaseSection {
         }
     }
 
+    IncrementalPropertyControlWithTitle {
+        id: previewVolumeControl
+
+        title: qsTrc("appshell/preferences", "Preview volume:")
+
+        enabled: root.playNotesWhenEditing
+
+        columnWidth: root.columnWidth
+        spacing: root.columnSpacing
+
+        measureUnitsSymbol: "%"
+
+        navigation.name: "NotePreviewVolumeControl"
+        navigation.panel: root.navigation
+        navigation.row: 2
+
+        minValue: 0
+        maxValue: 100
+
+        onValueEdited: function(newValue) {
+            root.notePreviewVolumeChangeRequested(newValue)
+        }
+    }
+
     CheckBox {
         id: playChordBox
         width: parent.width
@@ -111,7 +137,7 @@ BaseSection {
 
         navigation.name: "PlayChordBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 3
 
         onClicked: {
             root.playChordWhenEditingChangeRequested(!checked)
@@ -128,7 +154,7 @@ BaseSection {
 
         navigation.name: "PlayChordSymbolBox"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: 4
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)
@@ -145,7 +171,7 @@ BaseSection {
 
         navigation.name: "PlayPreviewNotesInInputByDurationBox"
         navigation.panel: root.navigation
-        navigation.row: 4
+        navigation.row: 5
 
         onClicked: {
             root.playPreviewNotesInInputByDurationChangeRequested(!checked)
@@ -160,7 +186,7 @@ BaseSection {
 
         navigation.name: "PlayNotesOnMidiInputBox"
         navigation.panel: root.navigation
-        navigation.row: 5
+        navigation.row: 6
 
         onClicked: {
             root.playNotesOnMidiInputChangeRequested(!checked)
