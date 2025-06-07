@@ -25,6 +25,7 @@
 #include "types/string.h"
 
 #include "playbacktypes.h"
+#include "dom/mscore.h"
 
 #include "log.h"
 
@@ -58,6 +59,7 @@ static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_
                                                                                         "playback/mixer/needToShowAboutResetSoundFlagsWhwnChangePlaybackProfileWarning");
 
 static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/muteHiddenInstruments");
+static const Settings::Key NOTE_PREVIEW_VOLUME(moduleName, "application/playback/notePreviewVolume");
 
 static const Settings::Key DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS(moduleName, "playback/profiles/defaultProfileName");
 static const SoundProfileName BASIC_PROFILE_NAME(u"MuseScore Basic");
@@ -126,6 +128,13 @@ void PlaybackConfiguration::init()
     settings()->valueChanged(MUTE_HIDDEN_INSTRUMENTS).onReceive(nullptr, [this](const Val& mute) {
         m_muteHiddenInstrumentsChanged.send(mute.toBool());
     });
+
+    settings()->setDefaultValue(NOTE_PREVIEW_VOLUME, Val(100));
+    settings()->valueChanged(NOTE_PREVIEW_VOLUME).onReceive(this, [this](const Val& val) {
+        MScore::notePreviewVolume = val.toInt();
+        m_notePreviewVolumeChanged.send(val.toInt());
+    });
+    MScore::notePreviewVolume = settings()->value(NOTE_PREVIEW_VOLUME).toInt();
 
     settings()->setDefaultValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(fallbackSoundProfileStr().toStdString()));
 
@@ -278,6 +287,22 @@ gain_t PlaybackConfiguration::defaultAuxSendValue(aux_channel_idx_t index, Audio
 bool PlaybackConfiguration::muteHiddenInstruments() const
 {
     return settings()->value(MUTE_HIDDEN_INSTRUMENTS).toBool();
+}
+
+int PlaybackConfiguration::notePreviewVolume() const
+{
+    return settings()->value(NOTE_PREVIEW_VOLUME).toInt();
+}
+
+void PlaybackConfiguration::setNotePreviewVolume(int volume)
+{
+    MScore::notePreviewVolume = volume;
+    settings()->setSharedValue(NOTE_PREVIEW_VOLUME, Val(volume));
+}
+
+muse::async::Channel<int> PlaybackConfiguration::notePreviewVolumeChanged() const
+{
+    return m_notePreviewVolumeChanged;
 }
 
 void PlaybackConfiguration::setMuteHiddenInstruments(bool mute)
