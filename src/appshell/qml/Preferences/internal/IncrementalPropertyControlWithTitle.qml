@@ -35,6 +35,9 @@ Row {
     property alias maxValue: control.maxValue
     property alias measureUnitsSymbol: control.measureUnitsSymbol
 
+    property var valueDescriptionProvider: null
+    property string valueDescription: ""
+
     property alias control: control
 
     property alias navigation: control.navigation
@@ -61,10 +64,26 @@ Row {
         decimals: 0
         step: 1
 
-        navigation.accessible.name: titleLabel.text + " " + currentValue + " " + measureUnitsSymbol
+        navigation.accessible.name: titleLabel.text + " " + currentValue + " " + measureUnitsSymbol + (root.valueDescription !== "" ? " " + root.valueDescription : "")
 
         onValueEdited: function(newValue) {
             root.valueEdited(newValue)
+            if (root.valueDescriptionProvider) {
+                root.valueDescription = root.valueDescriptionProvider(newValue)
+            }
+        }
+    }
+
+    StyledTextLabel {
+        id: descriptionLabel
+        anchors.verticalCenter: parent.verticalCenter
+        text: root.valueDescription
+        visible: root.valueDescription !== ""
+    }
+
+    Component.onCompleted: {
+        if (root.valueDescriptionProvider) {
+            root.valueDescription = root.valueDescriptionProvider(control.currentValue)
         }
     }
 }

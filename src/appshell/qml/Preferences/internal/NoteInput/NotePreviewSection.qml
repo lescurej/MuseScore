@@ -39,6 +39,27 @@ BaseSection {
     property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
     property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
 
+    function dynamicName(volume) {
+        const levels = [0, 7.5, 12.5, 17.5, 22.5, 27.5, 32.5, 37.5, 42.5,
+                        47.5, 50, 52.5, 57.5, 62.5, 67.5, 72.5,
+                        77.5, 82.5, 87.5, 92.5, 100]
+        const names = ["ppppppppp", "pppppppp", "ppppppp", "pppppp", "ppppp",
+                       "pppp", "ppp", "pp", "p", "mp", "natural",
+                       "mf", "f", "ff", "fff", "ffff", "fffff",
+                       "ffffff", "fffffff", "ffffffff", "fffffffff"]
+
+        var idx = 0
+        var minDiff = Math.abs(volume - levels[0])
+        for (var i = 1; i < levels.length; ++i) {
+            var diff = Math.abs(volume - levels[i])
+            if (diff < minDiff) {
+                minDiff = diff
+                idx = i
+            }
+        }
+        return names[idx]
+    }
+
     signal playNotesWhenEditingChangeRequested(bool play)
     signal playChordWhenEditingChangeRequested(bool play)
     signal playChordSymbolWhenEditingChangeRequested(bool play)
@@ -121,6 +142,8 @@ BaseSection {
 
         minValue: 0
         maxValue: 100
+
+        valueDescriptionProvider: root.dynamicName
 
         onValueEdited: function(newValue) {
             root.notePreviewVolumeChangeRequested(newValue)
