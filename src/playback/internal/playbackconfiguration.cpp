@@ -129,7 +129,7 @@ void PlaybackConfiguration::init()
         m_muteHiddenInstrumentsChanged.send(mute.toBool());
     });
 
-    settings()->setDefaultValue(NOTE_PREVIEW_VOLUME, Val(100));
+    settings()->setDefaultValue(NOTE_PREVIEW_VOLUME, Val(48));
     settings()->valueChanged(NOTE_PREVIEW_VOLUME).onReceive(this, [this](const Val& val) {
         MScore::notePreviewVolume = val.toInt();
         m_notePreviewVolumeChanged.send(val.toInt());

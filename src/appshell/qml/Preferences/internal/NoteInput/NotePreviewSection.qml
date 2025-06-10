@@ -34,7 +34,7 @@ BaseSection {
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
     property alias playPreviewNotesInInputByDuration: playPreviewNotesInInputByDurationBox.checked
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
-    property int notePreviewVolume: 100
+    property int notePreviewVolume: 48
 
     property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
     property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
@@ -133,6 +133,7 @@ BaseSection {
         currentIndex: previewVolumeDropdown.indexOfValue(root.notePreviewVolume)
 
         onValueEdited: function(newIndex, newValue) {
+            root.notePreviewVolume = newValue
             root.notePreviewVolumeChangeRequested(newValue)
         }
     }
