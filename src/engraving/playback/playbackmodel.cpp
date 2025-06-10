@@ -259,9 +259,10 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     timestamp_t actualTimestamp = 0;
     static constexpr dynamic_level_t minPreviewLevel = muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::ppp);
-    static constexpr dynamic_level_t maxPreviewLevel = muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::fff);
-    dynamic_level_t actualDynamicLevel = static_cast<dynamic_level_t>(
-        minPreviewLevel + (m_notePreviewVolume * (maxPreviewLevel - minPreviewLevel) / 100));
+    static constexpr dynamic_level_t maxPreviewLevel = muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::fffff);
+
+    dynamic_level_t actualDynamicLevel = m_notePreviewVolume * muse::mpe::ONE_PERCENT;
+    actualDynamicLevel = std::clamp(actualDynamicLevel, minPreviewLevel, maxPreviewLevel);
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
     const PlaybackContextPtr ctx = playbackCtx(trackId);
