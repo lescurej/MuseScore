@@ -34,31 +34,11 @@ BaseSection {
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
     property alias playPreviewNotesInInputByDuration: playPreviewNotesInInputByDurationBox.checked
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
-    property alias notePreviewVolume: previewVolumeControl.currentValue
+    property int notePreviewVolume: 100
 
     property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
     property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
 
-    function dynamicName(volume) {
-        const levels = [0, 7.5, 12.5, 17.5, 22.5, 27.5, 32.5, 37.5, 42.5,
-                        47.5, 50, 52.5, 57.5, 62.5, 67.5, 72.5,
-                        77.5, 82.5, 87.5, 92.5, 100]
-        const names = ["ppppppppp", "pppppppp", "ppppppp", "pppppp", "ppppp",
-                       "pppp", "ppp", "pp", "p", "mp", "natural",
-                       "mf", "f", "ff", "fff", "ffff", "fffff",
-                       "ffffff", "fffffff", "ffffffff", "fffffffff"]
-
-        var idx = 0
-        var minDiff = Math.abs(volume - levels[0])
-        for (var i = 1; i < levels.length; ++i) {
-            var diff = Math.abs(volume - levels[i])
-            if (diff < minDiff) {
-                minDiff = diff
-                idx = i
-            }
-        }
-        return names[idx]
-    }
 
     signal playNotesWhenEditingChangeRequested(bool play)
     signal playChordWhenEditingChangeRequested(bool play)
@@ -124,8 +104,8 @@ BaseSection {
         }
     }
 
-    IncrementalPropertyControlWithTitle {
-        id: previewVolumeControl
+    ComboBoxWithTitle {
+        id: previewVolumeDropdown
 
         title: qsTrc("appshell/preferences", "Preview volume:")
 
@@ -134,18 +114,25 @@ BaseSection {
         columnWidth: root.columnWidth
         spacing: root.columnSpacing
 
-        measureUnitsSymbol: "%"
-
-        navigation.name: "NotePreviewVolumeControl"
+        navigation.name: "NotePreviewVolumeDropdown"
         navigation.panel: root.navigation
         navigation.row: 2
 
-        minValue: 0
-        maxValue: 100
+        model: [
+            { text: "pppp", value: 28 },
+            { text: "pp", value: 38 },
+            { text: "p", value: 43 },
+            { text: "mp", value: 48 },
+            { text: "mf", value: 53 },
+            { text: "f", value: 58 },
+            { text: "ff", value: 63 },
+            { text: "fff", value: 68 },
+            { text: "ffff", value: 73 }
+        ]
 
-        valueDescriptionProvider: root.dynamicName
+        currentIndex: previewVolumeDropdown.indexOfValue(root.notePreviewVolume)
 
-        onValueEdited: function(newValue) {
+        onValueEdited: function(newIndex, newValue) {
             root.notePreviewVolumeChangeRequested(newValue)
         }
     }
