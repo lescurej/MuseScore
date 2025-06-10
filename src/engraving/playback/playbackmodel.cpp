@@ -35,6 +35,7 @@
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
 #include "dom/mscore.h"
+#include "playback/iplaybackconfiguration.h"
 
 #include "log.h"
 
@@ -70,6 +71,11 @@ void PlaybackModel::load(Score* score)
     }
 
     m_score = score;
+
+    m_notePreviewVolume = playbackConfiguration()->notePreviewVolume();
+    playbackConfiguration()->notePreviewVolumeChanged().onReceive(this, [this](int val) {
+        m_notePreviewVolume = val;
+    });
 
     auto changesChannel = score->changesChannel();
     changesChannel.resetOnReceive(this);
@@ -251,7 +257,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     const RepeatList& repeats = repeatList();
 
     timestamp_t actualTimestamp = 0;
-    dynamic_level_t actualDynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural) * MScore::notePreviewVolume / 100;
+    dynamic_level_t actualDynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural) * m_notePreviewVolume / 100;
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
     const PlaybackContextPtr ctx = playbackCtx(trackId);

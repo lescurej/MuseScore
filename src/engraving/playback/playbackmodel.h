@@ -34,6 +34,7 @@
 #include "modularity/ioc.h"
 #include "mpe/events.h"
 #include "mpe/iarticulationprofilesrepository.h"
+#include "playback/iplaybackconfiguration.h"
 
 #include "../types/types.h"
 #include "playbackeventsrenderer.h"
@@ -52,6 +53,7 @@ class PlaybackModel : public muse::Injectable, public muse::async::Asyncable
 {
 public:
     muse::Inject<muse::mpe::IArticulationProfilesRepository> profilesRepository = { this };
+    muse::Inject<mu::playback::IPlaybackConfiguration> playbackConfiguration = { this };
 
 public:
     PlaybackModel(const muse::modularity::ContextPtr& iocCtx)
@@ -164,6 +166,8 @@ private:
 
     std::unordered_map<InstrumentTrackId, PlaybackContextPtr> m_playbackCtxMap;
     std::unordered_map<InstrumentTrackId, muse::mpe::PlaybackData> m_playbackDataMap;
+
+    int m_notePreviewVolume = 48;
 
     muse::async::Notification m_dataChanged;
     muse::async::Channel<InstrumentTrackId> m_trackAdded;
