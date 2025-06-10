@@ -257,7 +257,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     const RepeatList& repeats = repeatList();
 
     timestamp_t actualTimestamp = 0;
-    dynamic_level_t actualDynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural) * m_notePreviewVolume / 100;
+    dynamic_level_t actualDynamicLevel = m_notePreviewVolume * muse::mpe::ONE_PERCENT;
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
     const PlaybackContextPtr ctx = playbackCtx(trackId);
